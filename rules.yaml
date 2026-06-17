@@ -1,0 +1,25 @@
+# Transaction Fraud Business Rules Configuration
+# These rules override the ML model if a transaction triggers them.
+
+global_system_rules:
+  # The strict threshold for the ML model (from our F2 optimization)
+  ml_fraud_threshold: 0.4648
+  
+  # Instantly flag any transaction above this amount, regardless of ML score
+  hard_amount_limit: 15000
+
+custom_risk_scenarios:
+  # Scenario 1: Late night, high value
+  night_owl_heavy_hitter:
+    active: true
+    condition:
+      is_night_hour: true # Matches our Hour_of_Day feature (1 AM - 5 AM)
+      min_amount: 3000
+    action: "FLAG_REVIEW"
+
+  # Scenario 2: Micro-testing (Often used by fraudsters to test stolen cards)
+  micro_transaction_testing:
+    active: true
+    condition:
+      max_amount: 1.50
+    action: "MONITOR"
