@@ -234,7 +234,7 @@ page = st.session_state.page
 if page == "Home":
     # Background image injection
     try:
-        with open("assets/bg.png", "rb") as image_file:
+        with open("bg.png", "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode()
         st.markdown(
             f"""
